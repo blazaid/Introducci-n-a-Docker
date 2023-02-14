@@ -304,6 +304,8 @@ $ docker run -d -P --name web nginx
 - `--name` le da un nombre al contenedor de forma local
 - `nginx` es el nombre de la imagen que se va a ejecutar
 
+_Spoiler alert_: No funciona aún
+
 ---
 
 # Listando los contenedores
@@ -328,6 +330,170 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 ```bash
 $ docker port web
 ```
+
+¿Pero por qué no funciona?
+
+---
+
+# Recordad la arquitectura
+
+<center>
+
+![alt:docker architecture](images/recordad-la-arquitectura.png)
+</center>
+
+---
+
+# Accediendo a los contenedores
+
+```bash
+$ docker inspect web
+```
+
+Nos dará toda la información sobre el contenedor de nombre `web`
+
+- Incluyendo la IP y el puerto en el que está escuchando
+
+Un comando para obtenerlo rápido:
+
+```bash
+$ docker inspect --format='{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web
+```
+
+Si accedemos a la IP del contenedor por el puerto 80, veremos la página de nginx
+
+---
+
+# Parando contenedores
+
+Si tenemos algun contenedor corriendo que queremos parar, podemos hacerlo con:
+
+```bash
+$ docker stop web
+```
+
+
+---
+
+# Imágenes<!--_class: section-->
+
+---
+
+# `Pull`
+
+Con `pull` nos descargaremos (sin ejecutar) una imagen de un registro
+
+```bash
+$ docker pull ubuntu
+```
+
+Esto nos descargará la última imagen de ubuntu
+
+- Esto es, la imagen `ubuntu:latest`
+
+---
+
+# `Images`
+
+La opción `images` mostrará las imágenes que tenemos en local
+
+```bash
+$ docker images
+```
+
+---
+
+# Imagenes bajo demanda
+
+Se puede reemplazar el comando a ejecutar de las imagenes:
+
+```bash
+$ docker run ubuntu /bin/echo 'Hola mundo'
+Hola mundo
+```
+
+Como `/bin/echo` no requiere nada nuevo, no se crea ninguna imagen nueva
+
+- Y como no se queda en ejecución, el contenedor se destruye una vez ha terminado
+
+---
+
+# _Logs_
+
+Podemos listar los contenedores que han estado en ejecución añadiendo `-a` a `ps`
+
+```bash
+$ docker ps -a
+```
+
+Así sabemos el nombre (o el id) del contenedor que ha estado en ejecución
+
+Luego, basta con usar `logs` para ver los logs de dicho contenedor
+
+```bash 
+$ docker logs web
+```
+
+---
+
+# Monitorización y enganche a contenedores
+
+Podemos arrancar de nuevo contenedores que estaban en ejecución con `start`
+
+```bash
+$ docker start web
+```
+
+Con el contenedor en ejecución , podemos monitorizar los logs con `logs -f`
+
+```bash
+$ docker logs -f web
+```
+
+Y también monitorizar su uso de recursos con `stats`
+
+```bash
+$ docker stats
+```
+
+Por último, podemos engancharnos a contenedores en ejecución con `attach`
+
+```bash
+$ docker attach web
+```
+
+---
+
+# Consola interactiva
+
+Podemos ejecutar un contenedor con una consola interactiva con `run -it`
+
+```bash
+$ docker run -it ubuntu
+```
+
+- `-i` indica que se ejecute en modo interactivo
+- `-t` indica que se ejecute con una consola
+
+Dentro podemos ejecutar comandos como si estuviesemos en otra máquina
+
+- Que de hecho lo estamos
+
+```bash
+root@b9b5b0b5b0b5:/# ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+```
+
+---
+
+# Próximamente
+
+- Creando, ejecutando y accediendo a nuestras imágenes
+- Puertos y enlaces
+- Variables de entorno
+- Volúmenes
+- Dockerfiles
+- Publicación de nuestras imágenes
 
 ---
 
