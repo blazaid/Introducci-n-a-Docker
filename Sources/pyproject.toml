@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "web-scraping-sources"
+version = "0.1.0"
+description = "Fuentes para ilustrar algunos ejemplos de web scraping con urllib y requests"
+authors = ["blazaid <alberto.da@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10.6"
+jupyter = "^1.0.0"
+requests = "^2.28.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

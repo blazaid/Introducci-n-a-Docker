@@ -1,0 +1,34 @@
+name: marp-to-pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Copy images
+        run: mkdir -p build/Slides && cp -R Slides/images build/Slides
+
+      - name: Marp Build PDFs
+        uses: docker://marpteam/marp-cli:v1.7.0
+        with:
+          args: -I Slides/ -o build/Slides/ --pdf --html --allow-local-files --theme-set Slides/styles/
+        env:
+          MARP_USER: root:root
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ./build/
+          clean-exclude: pr-preview/
+
